@@ -9,7 +9,7 @@ class SignUpForm(FlaskForm):
         validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', 
-        validators=[DataRequired()], EqualTo('password'))
+        validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Sign Up')
 
 class LoginForm(FlaskForm):
