@@ -1,0 +1,46 @@
+from flask import render_template, url_for, flash, redirect
+from app import app
+from app.forms import SignUpForm, LoginForm
+from app.models import User, Post
+
+posts = [
+    {
+        'author': 'Omar Lopez',
+        'title': 'First Post',
+        'content': 'Hi, my name is Omar Lopez',
+        'date_posted': 'March 18, 2021'
+    },
+    {
+        'author': 'Lebron James',
+        'title': 'Second Post',
+        'content': 'Hi, my name is Lebron James',
+        'date_posted': 'March 19, 2021'
+    }
+]
+
+@app.route('/')
+def home():
+    return render_template('home.html', posts=posts)
+
+@app.route('/about')
+def about():
+    return render_template('about.html', title='About')
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    form = SignUpForm()
+    if form.validate_on_submit():
+        flash(f'Account created for {form.username.data}!', 'success')
+        return redirect(url_for('home'))
+    return render_template('signup.html', title='Sign Up', form=form)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        if form.username.data == 'omarlopez' and form.password.data == 'password':
+            flash('You have been logged in!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Login Unsuccessful. Please check username and password', 'danger')
+    return render_template('login.html', title='Login', form=form)
