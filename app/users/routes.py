@@ -18,6 +18,7 @@ def signup():
         db.session.add(user)
         db.session.commit()
         flash(f'Your account has been created! You are now able to log in', 'success')
+        # updated url_for link to match blueprints
         return redirect(url_for('users.login'))
     return render_template('signup.html', title='Sign Up', form=form)
 
@@ -39,6 +40,7 @@ def login():
 @users.route('/logout')
 def logout():
     logout_user()
+    # updated url_for link to match blueprints
     return redirect(url_for('main.home'))
 
 @users.route('/account', methods=['GET', 'POST'])
@@ -52,6 +54,7 @@ def account():
         current_user.username = form.username.data
         db.session.commit()
         flash('Your account has been updated!', 'success')
+        # updated url_for link to match blueprints
         return redirect(url_for('users.account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
