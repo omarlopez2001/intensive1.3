@@ -18,7 +18,7 @@ def signup():
         db.session.add(user)
         db.session.commit()
         flash(f'Your account has been created! You are now able to log in', 'success')
-        return redirect(url_for('login'))
+        return redirect(url_for('users.login'))
     return render_template('signup.html', title='Sign Up', form=form)
 
 @users.route('/login', methods=['GET', 'POST'])
@@ -31,7 +31,7 @@ def login():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
-            return redirect (next_page) if next_page else redirect(url_for('home'))
+            return redirect (next_page) if next_page else redirect(url_for('main.home'))
         else:
             flash('Login unsuccessful. Please check username and password', 'danger')
     return render_template('login.html', title='Login', form=form)
@@ -39,7 +39,7 @@ def login():
 @users.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('main.home'))
 
 @users.route('/account', methods=['GET', 'POST'])
 @login_required
@@ -52,7 +52,7 @@ def account():
         current_user.username = form.username.data
         db.session.commit()
         flash('Your account has been updated!', 'success')
-        return redirect(url_for('account'))
+        return redirect(url_for('users.account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
